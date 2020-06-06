@@ -1,0 +1,21 @@
+.sidebar__container {
+  margin-top: 12px;
+}
+
+.sidebar__item {
+  border: 2px solid #000000;
+  margin: 0;
+  padding: 8px 16px;
+}
+
+.sidebar__item:hover {
+  background-color: blue;
+  border-color: blue;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.sidebar__selected {
+  background-color: blue;
+  color: #FFFFFF;
+}

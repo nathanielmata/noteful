@@ -1,0 +1,21 @@
+.main__container {
+  margin-top: 12px;
+  text-align: left;
+}
+
+.main__container p {
+  margin: 0 12px;
+  text-align: left;
+}
+
+.note__card  {
+  border: 2px solid #000000;
+  text-align: left;
+  padding: 8px 24px;
+  margin: 12px;
+}
+
+.note__card--click:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
