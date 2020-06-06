@@ -1,8 +1,9 @@
 import React from "react";
-import { Route, Link } from "react-router-dom";
+import {  Link, Route, Switch } from "react-router-dom";
 import MainSection from './composition/MainSection'
 import SidebarSection from './composition/SidebarSection'
 import "./App.css";
+import NotFoundPage from "./composition/NotFoundPage";
 
 class App extends React.Component {
   state = {
@@ -41,50 +42,53 @@ class App extends React.Component {
           </Link>
         </header>
         <nav className="sidebar">
-          <Route exact path="/" render={(props) =>
-            <SidebarSection
-              {...props}
-              data={store.folders}
-              handleClick={(props) => this.handleRouteClick(props)} />
-            }
-          />
-          <Route path="/folder/:folderId" render={(props) =>
-            <SidebarSection
-              {...props}
-              data={store.folders}
-              handleClick={(props) => this.handleRouteClick(props)} />
-            }
-          />
-          <Route path="/note/:noteId" render={(props) => 
-            <SidebarSection 
-              {...props}
-              data={this.getCurrentNoteData(store, props)} />
-            }
-          />
+          <Switch>
+            <Route exact path="/" render={(props) =>
+              <SidebarSection
+                {...props}
+                data={store.folders}
+                handleClick={(props) => this.handleRouteClick(props)} />
+              }
+            />
+            <Route path="/folder/:folderId" render={(props) =>
+              <SidebarSection
+                {...props}
+                data={store.folders}
+                handleClick={(props) => this.handleRouteClick(props)} />
+              }
+            />
+            <Route path="/note/:noteId" render={(props) => 
+              <SidebarSection 
+                {...props}
+                data={this.getCurrentNoteData(store, props)} />
+              }
+            />
+          </Switch>
         </nav>
         <main>
-          <Route exact path="/" render={(props) =>
-            <MainSection
-              {...props}
-              data={store.notes}
-              handleClick={(props) => this.handleRouteClick(props)} />
-            }
-          />
-
-          <Route path="/folder/:folderId" render={(props) => 
-            <MainSection 
-              {...props}
-              data={store.notes.filter(note => note.folderId === props.match.params.folderId)}
-              handleClick={(props) => this.handleRouteClick(props)} />
-            }
-          />
-
-          <Route path="/note/:noteId" render={(props) => 
-            <MainSection 
-              {...props}
-              data={this.getCurrentNoteData(store, props)} />
-            }
-          />
+          <Switch>
+            <Route exact path="/" render={(props) =>
+              <MainSection
+                {...props}
+                data={store.notes}
+                handleClick={(props) => this.handleRouteClick(props)} />
+              }
+            />
+            <Route path="/folder/:folderId" render={(props) => 
+              <MainSection 
+                {...props}
+                data={store.notes.filter(note => note.folderId === props.match.params.folderId)}
+                handleClick={(props) => this.handleRouteClick(props)} />
+              }
+            />
+            <Route path="/note/:noteId" render={(props) => 
+              <MainSection 
+                {...props}
+                data={this.getCurrentNoteData(store, props)} />
+              }
+            />
+            <Route component={NotFoundPage} />
+          </Switch>
         </main>
       </div>
     );
