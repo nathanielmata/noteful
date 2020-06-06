@@ -9,6 +9,7 @@ function MainSection(props) {
         <div className="note__card">
           <h1
             className={`note__card--name${!params.noteId ? " note__card--click" : ""}`}
+            linkpath={`/note/${note.id}`}
             onClick={params.noteId 
               ? () => null
               : () => props.handleClick({noteId: note.id, history: props.history})}>

@@ -6,6 +6,7 @@
   border: 2px solid #000000;
   margin: 0;
   padding: 8px 16px;
+  width: 100%;
 }
 
 .sidebar__item:hover {
