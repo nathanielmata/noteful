@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './MainSection.css';
 
 function MainSection(props) { 
@@ -7,13 +8,20 @@ function MainSection(props) {
     return (
       <>
         <div className="note__card">
-          <h1
-            className={`note__card--name${!params.noteId ? " note__card--click" : ""}`}
-            linkpath={`/note/${note.id}`}
-            onClick={params.noteId 
-              ? () => null
-              : () => props.handleClick({noteId: note.id, history: props.history})}>
-            {note.name}
+          <h1>
+            {!params.noteId &&
+              <Link
+                to={`/note/${note.id}`}
+                className="note__card--name note__card--click">
+                {note.name}
+              </Link>
+            }
+
+            {params.noteId &&
+              <span className="note__card--name">
+                {note.name}
+              </span>
+            }
           </h1>
           <div>
             <span>{note.modified}</span>

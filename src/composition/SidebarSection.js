@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './SidebarSection.css';
 
 function SidebarSection(props) {
@@ -6,16 +7,21 @@ function SidebarSection(props) {
   const folders = props.data.map(folder => {
     return (
       <React.Fragment key={folder.id}>
-        <button 
-          className={`sidebar__item ${params.folderId === folder.id ? "sidebar__selected" : ""} `}
-          linkpath={params.noteId ? "goBack" : `/folder/${folder.id}`}
-          onClick={params.noteId
-            ? () => props.history.goBack()
-            : () => props.handleClick({folderId: folder.id, history: props.history})}>
-          {params.noteId ? <span>Go back</span> : folder.name }
-        </button>
+        {!params.noteId &&
+          <Link
+            to={`/folder/${folder.id}`}
+            className={`sidebar__item${params.folderId === folder.id ? " sidebar__selected" : ""}`}>
+            {folder.name}
+          </Link>
+        }
+
         {params.noteId && 
-          <h1>{folder.folderName}</h1>
+          <>
+            <button className="sidebar__item" onClick={() => props.history.goBack()}>
+              Go back
+            </button>
+            <h1>{folder.folderName}</h1>
+          </>
         }
       </React.Fragment>
     )
