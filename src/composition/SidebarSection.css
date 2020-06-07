@@ -2,6 +2,10 @@
   margin-top: 12px;
 }
 
+.sidebar__hide {
+  display: none;
+}
+
 .sidebar__item {
   border: 2px solid #000000;
   margin: 0;

@@ -7,7 +7,16 @@ import NotFoundPage from "./composition/NotFoundPage";
 
 class App extends React.Component {
   state = {
-    store: this.props.store
+    store: this.props.store,
+    notFound: false
+  }
+
+  notFoundState = (bool) => {
+    const store = this.state.store;
+    this.setState({
+      store: store,
+      notFound: bool
+    });
   }
 
   getCurrentNoteData = (store, props) => {
@@ -23,6 +32,12 @@ class App extends React.Component {
   // callback with click can also be useful if there is any logic that needs to be executed on click
   // unfortunately this solution also breaks the semantic use of anchor tag for linking
   handleRouteClick = (props) => {
+    const store = this.state.store;
+    this.setState({
+      store: store,
+      notFound: false
+    });
+
     if (props.folderId) {
       props.history.push(`/folder/${props.folderId}`);
     }
@@ -37,11 +52,13 @@ class App extends React.Component {
     return (
       <div className="App">
         <header>
-          <Link to="/">
+          <Link to="/" onClick={() => {this.notFoundState(false)}}>
             <h1>Noteful</h1>
           </Link>
         </header>
-        <nav className="sidebar">
+        <nav className={this.state.notFound === true
+          ? "sidebar__hide"
+          : "sidebar"}>
           <Switch>
             <Route exact path="/" render={(props) =>
               <SidebarSection
@@ -87,7 +104,12 @@ class App extends React.Component {
                 data={this.getCurrentNoteData(store, props)} />
               }
             />
-            <Route component={NotFoundPage} />
+            <Route render={(props) => {
+              return (
+                <NotFoundPage
+                  renderNotFound={() => {this.notFoundState(true)}} />
+              );
+            }} />
           </Switch>
         </main>
       </div>
