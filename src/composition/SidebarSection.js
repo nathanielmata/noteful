@@ -29,12 +29,13 @@ function SidebarSection(props) {
 
   return (
     <div className="sidebar__container">
-      {params.noteId 
-        ? folders
-        : listWrapper(folders)}
-      {!params.noteId &&
-        <button>Add note</button>
+      {!params.noteId && 
+        <>
+          {listWrapper(folders)}
+          <button>Add note</button>
+        </>
       }
+      {params.noteId && folders}
     </div>
   )
 }
