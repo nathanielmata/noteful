@@ -1,20 +1,56 @@
 import React from "react";
 import {  Link, Route, Switch } from "react-router-dom";
-import MainSection from './composition/MainSection'
-import SidebarSection from './composition/SidebarSection'
-import "./App.css";
+import MainSection from './composition/MainSection';
+import SidebarSection from './composition/SidebarSection';
 import NotFoundPage from "./composition/NotFoundPage";
+import "./App.css";
 
 class App extends React.Component {
-  state = {
-    store: this.props.store,
-    notFound: false
+  constructor() {
+    super()
+    this.state = {
+      store: {
+        folders: [],
+        notes: []
+      },
+      notFound: false
+    }
+
+    this.fetchURL = "http://localhost:9090/";
   }
 
-  notFoundState = (bool) => {
-    const store = this.state.store;
+  componentDidMount() {
+    Object.keys(this.state.store).forEach(key => {
+      fetch(`${this.fetchURL}${key}`, {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json'
+        },
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json.then(error => {
+            throw error;
+          })
+        }
+        return response.json();
+      })
+      .then(responseJson => {
+        const store = {...this.state.store}
+        store[key] = responseJson
+        this.setState({
+          store: {...store},
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    });
+  }
+
+  notFoundState = (bool) => {;
     this.setState({
-      store: store,
+      store: this.state.store,
       notFound: bool
     });
   }
@@ -32,9 +68,8 @@ class App extends React.Component {
   // callback with click can also be useful if there is any logic that needs to be executed on click
   // unfortunately this solution also breaks the semantic use of anchor tag for linking
   handleRouteClick = (props) => {
-    const store = this.state.store;
     this.setState({
-      store: store,
+      store: this.state.store,
       notFound: false
     });
 
