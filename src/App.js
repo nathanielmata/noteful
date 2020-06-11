@@ -20,7 +20,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    Object.keys(this.state.store).forEach(key => {
+    Object.keys({...this.state.store}).forEach(key => {
       fetch(`${this.fetchURL}${key}`, {
         method: 'GET',
         headers: {
@@ -36,10 +36,11 @@ class App extends React.Component {
         return response.json();
       })
       .then(responseJson => {
-        const store = {...this.state.store}
-        store[key] = responseJson
         this.setState({
-          store: {...store},
+          store: {
+            ...this.state.store,
+            [key]: responseJson
+          },
         });
       })
       .catch(err => {
