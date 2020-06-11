@@ -36,6 +36,7 @@ class App extends React.Component {
         return response.json();
       })
       .then(responseJson => {
+        // console.log({...this.state.store, [key]: responseJson});
         this.setState({
           store: {
             ...this.state.store,
@@ -64,25 +65,6 @@ class App extends React.Component {
     return [note];
   }
 
-  // handle click on any element that connects to a dynamic route
-  // likely better to use React-Router NavLink here but
-  // callback with click can also be useful if there is any logic that needs to be executed on click
-  // unfortunately this solution also breaks the semantic use of anchor tag for linking
-  handleRouteClick = (props) => {
-    this.setState({
-      store: this.state.store,
-      notFound: false
-    });
-
-    if (props.folderId) {
-      props.history.push(`/folder/${props.folderId}`);
-    }
-
-    if (props.noteId) {
-      props.history.push(`/note/${props.noteId}`);
-    }
-  }
-
   render() {
     const store = this.state.store;
     return (
@@ -99,15 +81,13 @@ class App extends React.Component {
             <Route exact path="/" render={(props) =>
               <SidebarSection
                 {...props}
-                data={store.folders}
-                handleClick={(props) => this.handleRouteClick(props)} />
+                data={store.folders}/>
               }
             />
             <Route path="/folder/:folderId" render={(props) =>
               <SidebarSection
                 {...props}
-                data={store.folders}
-                handleClick={(props) => this.handleRouteClick(props)} />
+                data={store.folders} />
               }
             />
             <Route path="/note/:noteId" render={(props) => 
@@ -123,15 +103,13 @@ class App extends React.Component {
             <Route exact path="/" render={(props) =>
               <MainSection
                 {...props}
-                data={store.notes}
-                handleClick={(props) => this.handleRouteClick(props)} />
+                data={store.notes} />
               }
             />
             <Route path="/folder/:folderId" render={(props) => 
               <MainSection 
                 {...props}
-                data={store.notes.filter(note => note.folderId === props.match.params.folderId)}
-                handleClick={(props) => this.handleRouteClick(props)} />
+                data={store.notes.filter(note => note.folderId === props.match.params.folderId)} />
               }
             />
             <Route path="/note/:noteId" render={(props) => 
