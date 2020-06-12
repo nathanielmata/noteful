@@ -46,7 +46,7 @@ class SidebarSection extends React.Component {
             return (
               <>
                 {listWrapper(folders)}
-                <button>Add note</button>
+                <button>Add folder</button>
               </>
             );
           }
