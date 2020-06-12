@@ -52,36 +52,42 @@ class App extends React.Component {
   }
 
 
-  deleteNote = () => {
-    return false;
+  deleteNote = (noteId) => {
+    const notes = this.state.store.notes.filter(note => note.id !== noteId);
+    this.setState({
+      store: {
+        ...this.state.store,
+        notes
+      }      
+    })
   }
 
   notFoundState = (bool) => {
     this.setState({
-      store: this.state.store,
       notFound: bool
     });
   }
 
   getCurrentNoteData = (id) => {
+    // add folderName to our note data obj and wrap in an array b/c our component expects an array 
+    const note = this.state.store.notes.find(note => note.id === id);
+    
     // if folders and notes not available return empty array
     // necessary because getCurrentNoteData fires before componentDidMount fetches data
     // when using the back button in browser
-    if (!this.state.store.folders.length || !this.state.store.notes.length) {
-      return [];
-    }  
+    if (this.state.store.folders.length && note) {      
+      // we need the current note folder name to display in the sidebar so add it to the note we just retrieved
+      note["folderName"] = this.state.store.folders.find(folder => folder.id === note.folderId).name;
+      return [note];
+    }
 
-    // add folderName to our note data obj and wrap in an array b/c our component expects an array 
-    const note = this.state.store.notes.find(note => note.id === id);
-
-    // we need the current note folder name to display in the sidebar so add it to the note we just retrieved
-    note["folderName"] = this.state.store.folders.find(folder => folder.id === note.folderId).name;
-    return [note];
+    return [];
   }
 
   render() {
     const contextValue = {
       store: this.state.store,
+      fetchURL: this.fetchURL,
       deleteNote: this.deleteNote,
       notFoundState: this.notFoundState,
       getCurrentNoteData: this.getCurrentNoteData,

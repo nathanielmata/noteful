@@ -10,6 +10,30 @@ class MainSection extends React.Component {
     this.context.notFoundState(false);
   }
 
+  deleteNoteRequest(noteId) {
+    fetch(this.context.fetchURL + `notes/${noteId}`, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json'
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        response.json().then(error => {
+          throw error;
+        })
+      }
+      return response.json();
+    })
+    .then(responseJson => {
+      this.context.deleteNote(noteId)
+      if (this.props.match.params.noteId) {
+        this.props.history.push('/');
+      }
+    })
+    .catch(err => console.log(err));
+  }
+
   render() {
     const params = this.props.match.params;
     let data = params.noteId 
@@ -41,7 +65,7 @@ class MainSection extends React.Component {
             </h1>
             <div>
               <span>{note.modified}</span>
-              <button>Delete Note</button>
+              <button onClick={() => this.deleteNoteRequest(note.id)}>Delete Note</button>
             </div>
           </div>
           {params.noteId &&
