@@ -1,52 +1,61 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import NotefulContext from '../NotefulContext';
 import './SidebarSection.css';
 
-function SidebarSection(props) {
-  const params = props.match.params;
-  const folders = props.data.map(folder => {
-    return (
-      <React.Fragment key={folder.id}>
-        {(() => {
-          if (!params.noteId) {
+class SidebarSection extends React.Component {
+  static contextType = NotefulContext;
+  
+  render() {
+    const params = this.props.match.params;
+    const data = params.noteId 
+      ? this.context.getCurrentNoteData(params.noteId) 
+      : this.context.store.folders;
+
+    const folders = data.map(folder => {
+      return (
+        <React.Fragment key={folder.id}>
+          {(() => {
+            if (!params.noteId) {
+              return (
+                <Link
+                  to={`/folder/${folder.id}`}
+                  className={`sidebar__item${params.folderId === folder.id ? " sidebar__selected" : ""}`}>
+                  {folder.name}
+                </Link>
+              );
+            }
+            
             return (
-              <Link
-                to={`/folder/${folder.id}`}
-                className={`sidebar__item${params.folderId === folder.id ? " sidebar__selected" : ""}`}>
-                {folder.name}
-              </Link>
+              <>
+                <button className="sidebar__item" onClick={() => this.props.history.goBack()}>
+                  Go back
+                </button>
+                <h1>{folder.folderName}</h1>
+              </>
+            );
+          })()}
+        </React.Fragment>
+      );
+    });
+
+    return (
+      <div className="sidebar__container">
+        {(() => {
+          if (!params.noteId){
+            return (
+              <>
+                {listWrapper(folders)}
+                <button>Add note</button>
+              </>
             );
           }
           
-          return (
-            <>
-              <button className="sidebar__item" onClick={() => props.history.goBack()}>
-                Go back
-              </button>
-              <h1>{folder.folderName}</h1>
-            </>
-          );
+          return <>{folders}</>;
         })()}
-      </React.Fragment>
-    )
-  })
-
-  return (
-    <div className="sidebar__container">
-      {(() => {
-        if (!params.noteId){
-          return (
-            <>
-              {listWrapper(folders)}
-              <button>Add note</button>
-            </>
-          );
-        }
-        
-        return <>{folders}</>;
-      })()}
-    </div>
-  )
+      </div>
+    );
+  }
 }
 
 // wrap folders in a list

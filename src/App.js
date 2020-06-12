@@ -1,8 +1,9 @@
-import React from "react";
-import {  Link, Route, Switch } from "react-router-dom";
+import React from 'react';
+import {  Link, Route, Switch } from 'react-router-dom';
 import MainSection from './composition/MainSection';
 import SidebarSection from './composition/SidebarSection';
-import NotFoundPage from "./composition/NotFoundPage";
+import NotFoundPage from './composition/NotFoundPage';
+import NotefulContext from './NotefulContext';
 import "./App.css";
 
 class App extends React.Component {
@@ -50,82 +51,74 @@ class App extends React.Component {
     });
   }
 
-  notFoundState = (bool) => {;
+
+  deleteNote = () => {
+    return false;
+  }
+
+  notFoundState = (bool) => {
     this.setState({
       store: this.state.store,
       notFound: bool
     });
   }
 
-  getCurrentNoteData = (store, props) => {
+  getCurrentNoteData = (id) => {
+    // if folders and notes not available return empty array
+    // necessary because getCurrentNoteData fires before componentDidMount fetches data
+    // when using the back button in browser
+    if (!this.state.store.folders.length || !this.state.store.notes.length) {
+      return [];
+    }  
+
     // add folderName to our note data obj and wrap in an array b/c our component expects an array 
-    const note = store.notes.find(note => note.id === props.match.params.noteId);
-    // we need the current note folder name to display in the sidebar
-    note["folderName"] = store.folders.find(folder => folder.id === note.folderId).name;
+    const note = this.state.store.notes.find(note => note.id === id);
+
+    // we need the current note folder name to display in the sidebar so add it to the note we just retrieved
+    note["folderName"] = this.state.store.folders.find(folder => folder.id === note.folderId).name;
     return [note];
   }
 
   render() {
-    const store = this.state.store;
+    const contextValue = {
+      store: this.state.store,
+      deleteNote: this.deleteNote,
+      notFoundState: this.notFoundState,
+      getCurrentNoteData: this.getCurrentNoteData,
+    }
+
+    console.log(this.state.notFound);
     return (
       <div className="App">
         <header>
-          <Link to="/" onClick={() => {this.notFoundState(false)}}>
+          <Link to="/">
             <h1>Noteful</h1>
           </Link>
         </header>
-        <nav className={this.state.notFound === true
-          ? "sidebar__hide"
-          : "sidebar"}>
-          <Switch>
-            <Route exact path="/" render={(props) =>
-              <SidebarSection
-                {...props}
-                data={store.folders}/>
-              }
-            />
-            <Route path="/folder/:folderId" render={(props) =>
-              <SidebarSection
-                {...props}
-                data={store.folders} />
-              }
-            />
-            <Route path="/note/:noteId" render={(props) => 
-              <SidebarSection 
-                {...props}
-                data={this.getCurrentNoteData(store, props)} />
-              }
-            />
-          </Switch>
-        </nav>
-        <main>
-          <Switch>
-            <Route exact path="/" render={(props) =>
-              <MainSection
-                {...props}
-                data={store.notes} />
-              }
-            />
-            <Route path="/folder/:folderId" render={(props) => 
-              <MainSection 
-                {...props}
-                data={store.notes.filter(note => note.folderId === props.match.params.folderId)} />
-              }
-            />
-            <Route path="/note/:noteId" render={(props) => 
-              <MainSection 
-                {...props}
-                data={this.getCurrentNoteData(store, props)} />
-              }
-            />
-            <Route render={(props) => {
-              return (
-                <NotFoundPage
-                  renderNotFound={() => {this.notFoundState(true)}} />
-              );
-            }} />
-          </Switch>
-        </main>
+        <NotefulContext.Provider value={contextValue}>
+          {this.state.notFound === false &&
+            <nav>
+              <Switch>
+                <Route exact path="/" component={SidebarSection} />
+                <Route path="/folder/:folderId" component={SidebarSection} />
+                <Route path="/note/:noteId" component={SidebarSection} />
+              </Switch>
+            </nav>
+          }
+          <main>
+            <Switch>
+              <Route exact path="/" component={MainSection}/>
+              <Route path="/folder/:folderId" component={MainSection}/>
+              <Route path="/note/:noteId" component={MainSection}/>
+              <Route render={(props) => {
+                return (
+                  <NotFoundPage
+                    renderNotFound={() => {this.notFoundState(true)}} />
+                );
+              }} />
+            </Switch>
+          </main>
+        </NotefulContext.Provider>
       </div>
     );
   }
