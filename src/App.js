@@ -2,8 +2,10 @@ import React from 'react';
 import {  Link, Route, Switch } from 'react-router-dom';
 import MainSection from './composition/MainSection';
 import SidebarSection from './composition/SidebarSection';
+import AddFolder from './composition/AddFolder';
 import NotFoundPage from './composition/NotFoundPage';
 import NotefulContext from './NotefulContext';
+import config from './config';
 import "./App.css";
 
 class App extends React.Component {
@@ -16,13 +18,11 @@ class App extends React.Component {
       },
       notFound: false
     }
-
-    this.fetchURL = "http://localhost:9090/";
   }
 
   componentDidMount() {
     Object.keys({...this.state.store}).forEach(key => {
-      fetch(`${this.fetchURL}${key}`, {
+      fetch(`${config.API_URL}${key}`, {
         method: 'GET',
         headers: {
           'content-type': 'application/json'
@@ -87,7 +87,6 @@ class App extends React.Component {
   render() {
     const contextValue = {
       store: this.state.store,
-      fetchURL: this.fetchURL,
       deleteNote: this.deleteNote,
       notFoundState: this.notFoundState,
       getCurrentNoteData: this.getCurrentNoteData,
@@ -114,6 +113,7 @@ class App extends React.Component {
           <main>
             <Switch>
               <Route exact path="/" component={MainSection}/>
+              <Route exact path="/folder/new" component={AddFolder} />
               <Route path="/folder/:folderId" component={MainSection}/>
               <Route path="/note/:noteId" component={MainSection}/>
               <Route render={(props) => {

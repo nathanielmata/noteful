@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import NotefulContext from '../NotefulContext';
+import config from '../config';
 import './MainSection.css';
 
 class MainSection extends React.Component { 
@@ -11,7 +12,7 @@ class MainSection extends React.Component {
   }
 
   deleteNoteRequest(noteId, deleteNoteCb) {
-    fetch(this.context.fetchURL + `notes/${noteId}`, {
+    fetch(config.API_URL + `notes/${noteId}`, {
       method: 'DELETE',
       headers: {
         'content-type': 'application/json'
