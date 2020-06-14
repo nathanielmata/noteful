@@ -46,7 +46,7 @@ class SidebarSection extends React.Component {
             return (
               <>
                 {listWrapper(folders)}
-                <button>Add folder</button>
+                <button onClick={() => this.props.history.push('/folder/new')}>Add folder</button>
               </>
             );
           }
