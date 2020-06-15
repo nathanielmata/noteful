@@ -7,9 +7,10 @@
 
 .form__group * {
   display: block;
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 
 .form__container  button {
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 0;
 }

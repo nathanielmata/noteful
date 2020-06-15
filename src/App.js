@@ -62,6 +62,15 @@ class App extends React.Component {
     })
   }
 
+  addFolder = (folderObj) => {
+    this.setState({
+      store: {
+        ...this.state.store,
+        folders: [...this.state.store.folders, folderObj]
+      }
+    })
+  }
+
   notFoundState = (bool) => {
     this.setState({
       notFound: bool
@@ -88,6 +97,7 @@ class App extends React.Component {
     const contextValue = {
       store: this.state.store,
       deleteNote: this.deleteNote,
+      addFolder: this.addFolder,
       notFoundState: this.notFoundState,
       getCurrentNoteData: this.getCurrentNoteData,
     }
@@ -119,7 +129,7 @@ class App extends React.Component {
               <Route render={(props) => {
                 return (
                   <NotFoundPage
-                    renderNotFound={() => {this.notFoundState(true)}} />
+                    renderNotFound={() => {this.notFoundState()}} />
                 );
               }} />
             </Switch>

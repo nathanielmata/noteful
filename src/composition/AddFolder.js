@@ -1,5 +1,6 @@
 import React from 'react';
 import './AddFolder.css';
+import NotefulContext from '../NotefulContext';
 import config from '../config';
 
 class AddFolder extends React.Component {
@@ -10,22 +11,36 @@ class AddFolder extends React.Component {
     }
   }
 
-  // componentDidMount() {
-  //   this.context.notFoundState(false);
-  // }
+  static contextType = NotefulContext;
 
-  postFolderRequest(postFolderCb) {
-    // generate a folder id for posting to api
-    // or does the server generate one when you post
+  componentDidMount() {
+    this.context.notFoundState(false);
+  }
+
+  postFolderRequest(event, postFolderCb) {
+    event.preventDefault();
+    const name = this.state.name.value;
+
     fetch(config.API_URL + 'folders', {
       method: 'POST',
+      body: JSON.stringify({name}),
       headers: {
         'content-type': 'application/json'
       }
     })
-    .then()
-    .then()
-    .catch(err => console.log(err))
+    .then(response => {
+      if (!response.ok) {
+        response.json().then(error => {
+          throw error;
+        });
+      }
+      return response.json();
+    })
+    .then(responseJson => {
+      postFolderCb(responseJson);
+      this.props.history.push('/');
+    })
+    .catch(err => console.log(err));
   }
 
   handleChange(event) {
@@ -40,10 +55,12 @@ class AddFolder extends React.Component {
   render() {
     console.log(this.state.name.value);
     return (
-      <form className="form__container">
+      <form 
+      className="form__container"
+      onSubmit={(e) => this.postFolderRequest(e, this.context.addFolder)}>
         <h1>Add folder</h1>
         <div className="form__group">
-          <label htmlFor="name">Name:</label>
+          <label htmlFor="name">Folder Name:</label>
           <input 
             name="name"
             id="name"
