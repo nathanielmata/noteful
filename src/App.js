@@ -1,8 +1,8 @@
 import React from 'react';
 import {  Link, Route, Switch } from 'react-router-dom';
 import MainSection from './composition/MainSection';
-import SidebarSection from './composition/SidebarSection';
 import AddFolder from './composition/AddFolder';
+import AddNote from './composition/AddNote';
 import NotFoundPage from './composition/NotFoundPage';
 import NotefulContext from './NotefulContext';
 import config from './config';
@@ -15,12 +15,12 @@ class App extends React.Component {
       store: {
         folders: [],
         notes: []
-      },
-      notFound: false
+      }
     }
   }
 
   componentDidMount() {
+    // retrieve data from api
     Object.keys({...this.state.store}).forEach(key => {
       fetch(`${config.API_URL}${key}`, {
         method: 'GET',
@@ -71,10 +71,13 @@ class App extends React.Component {
     })
   }
 
-  notFoundState = (bool) => {
+  addNote = (noteObj) => {
     this.setState({
-      notFound: bool
-    });
+      store: {
+        ...this.state.store,
+        notes: [...this.state.store.notes, noteObj]
+      }
+    })
   }
 
   getCurrentNoteData = (id) => {
@@ -98,7 +101,7 @@ class App extends React.Component {
       store: this.state.store,
       deleteNote: this.deleteNote,
       addFolder: this.addFolder,
-      notFoundState: this.notFoundState,
+      addNote: this.addNote,
       getCurrentNoteData: this.getCurrentNoteData,
     }
 
@@ -111,29 +114,16 @@ class App extends React.Component {
           </Link>
         </header>
         <NotefulContext.Provider value={contextValue}>
-          {this.state.notFound === false &&
-            <nav>
-              <Switch>
-                <Route exact path="/" component={SidebarSection} />
-                <Route path="/folder/:folderId" component={SidebarSection} />
-                <Route path="/note/:noteId" component={SidebarSection} />
-              </Switch>
-            </nav>
-          }
-          <main>
+          <>
             <Switch>
               <Route exact path="/" component={MainSection}/>
               <Route exact path="/folder/new" component={AddFolder} />
               <Route path="/folder/:folderId" component={MainSection}/>
+              <Route exact path="/note/new" component={AddNote} />
               <Route path="/note/:noteId" component={MainSection}/>
-              <Route render={(props) => {
-                return (
-                  <NotFoundPage
-                    renderNotFound={() => {this.notFoundState()}} />
-                );
-              }} />
+              <Route component={NotFoundPage} />
             </Switch>
-          </main>
+          </>
         </NotefulContext.Provider>
       </div>
     );

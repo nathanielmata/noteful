@@ -1,15 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import MainWrapper from './MainWrapper';
+import SidebarWrapper from './SidebarWrapper';
+import SidebarSection from './SidebarSection';
 import NotefulContext from '../NotefulContext';
 import config from '../config';
 import './MainSection.css';
 
 class MainSection extends React.Component { 
   static contextType = NotefulContext;
-
-  componentDidMount() {
-    this.context.notFoundState(false);
-  }
 
   deleteNoteRequest(noteId, deleteNoteCb) {
     fetch(config.API_URL + `notes/${noteId}`, {
@@ -45,6 +44,7 @@ class MainSection extends React.Component {
       data = this.context.store.notes.filter(note => note.folderId === params.folderId);
     }
 
+    // iterate over main note data
     const notes = data.map(note => {
       return (
         <>
@@ -79,17 +79,22 @@ class MainSection extends React.Component {
     });
   
     return (
-      <div className="main__container">
-        {params.noteId ? notes[0] : listWrapper(notes)}
-        {!params.noteId &&
-          <button>Add note</button>
-        }
-      </div>
+      <>
+        <SidebarWrapper>  
+          <SidebarSection {...this.props} />
+        </SidebarWrapper>
+        <MainWrapper>
+          {params.noteId ? notes[0] : listWrapper(notes)}
+          {!params.noteId &&
+            <button onClick={() => this.props.history.push('/note/new')}>Add note</button>
+          }
+        </MainWrapper>
+      </>
     );
   }
 }
 
-// wrap notes in a list
+// wrap notes in a unordered list
 function listWrapper(notes) {
   return (
     <ul>

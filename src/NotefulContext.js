@@ -6,7 +6,6 @@ const NotefulContext = React.createContext({
     notes: []
   },
   deleteNote: () => {},
-  notFoundState: () => {},
   getCurrentNoteData: () => {},
 });
 

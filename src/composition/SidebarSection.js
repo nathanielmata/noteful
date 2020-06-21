@@ -12,60 +12,60 @@ class SidebarSection extends React.Component {
       ? this.context.getCurrentNoteData(params.noteId) 
       : this.context.store.folders;
 
-    const folders = data.map(folder => {
+    // iterate over sidebar folder data
+    const folders = data.map((folder, idx) => {
       return (
         <React.Fragment key={folder.id}>
-          {(() => {
-            if (!params.noteId) {
+          {
+            (() => {
+              // if route is not note page return folder links
+              if (!params.noteId) {
+                return (
+                  <li key={idx}>
+                    <Link
+                      to={`/folder/${folder.id}`}
+                      className={`sidebar__item${params.folderId === folder.id ? " sidebar__selected" : ""}`}>
+                      {folder.name}
+                    </Link>
+                  </li>
+                );
+              }
+              
+              // if note page return back button and folder name
               return (
-                <Link
-                  to={`/folder/${folder.id}`}
-                  className={`sidebar__item${params.folderId === folder.id ? " sidebar__selected" : ""}`}>
-                  {folder.name}
-                </Link>
+                <>
+                  <button className="sidebar__item" onClick={() => this.props.history.goBack()}>
+                    Go back
+                  </button>
+                  <h1>{folder.folderName}</h1>
+                </>
               );
-            }
-            
-            return (
-              <>
-                <button className="sidebar__item" onClick={() => this.props.history.goBack()}>
-                  Go back
-                </button>
-                <h1>{folder.folderName}</h1>
-              </>
-            );
-          })()}
+            })()
+          }
         </React.Fragment>
       );
     });
 
     return (
-      <div className="sidebar__container">
-        {(() => {
-          if (!params.noteId){
-            return (
-              <>
-                {listWrapper(folders)}
-                <button onClick={() => this.props.history.push('/folder/new')}>Add folder</button>
-              </>
-            );
-          }
-          
-          return <>{folders}</>;
-        })()}
-      </div>
+      <>
+        {(() => !params.noteId
+          ? listWrapper(folders, this.props.history)
+          : folders   
+        )()}
+      </>
     );
   }
 }
 
-// wrap folders in a list
-function listWrapper(folders) {
+// wrap folders in an unordered list
+function listWrapper(folders, history ) {
   return (
-    <ul>
-      {folders.map((folder, idx) => 
-        <li key={idx}>{folder}</li>
-      )}
-    </ul>
+    <>
+      <ul>
+        {folders}
+      </ul>
+      <button onClick={() => history.push('/folder/new')}>Add folder</button>
+    </>
   );
 }
 

@@ -1,15 +1,14 @@
 import React from 'react';
+import MainWrapper from './MainWrapper';
 
 class NotFoundPage extends React.Component {
-  componentDidMount() {
-    this.props.renderNotFound(true);
-  }
-
   render() {
     return (
-      <div className="notfound__container">
-        Page not found
-      </div>
+      <MainWrapper>
+        <div className="notfound__container">
+          Page not found
+        </div>
+      </MainWrapper>
     );
   }
 }
