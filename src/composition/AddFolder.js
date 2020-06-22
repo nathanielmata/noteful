@@ -1,6 +1,8 @@
 import React from 'react';
 import MainWrapper from './MainWrapper';
+import ValidationError from './ValidationError';
 import NotefulContext from '../NotefulContext';
+import { validateName } from '../validate';
 import config from '../config';
 import './AddFolder.css';
 
@@ -50,7 +52,7 @@ class AddFolder extends React.Component {
   }
 
   render() {
-    console.log(this.state.name.value);
+    const nameError = validateName(this.state.name.value);
     return (
       <MainWrapper>
         <form 
@@ -64,9 +66,16 @@ class AddFolder extends React.Component {
               id="name"
               value={this.state.name.value}
               onChange={(e) => this.handleChange(e)} />
+            {this.state.name.touched && (
+              <ValidationError message={nameError}/>
+            )}
           </div>
           <div className="form__group">
-            <button type="submit">Add folder</button>
+            <button 
+              type="submit"
+              disabled={nameError}>
+                Add folder
+            </button>
           </div>
         </form>
       </MainWrapper>
