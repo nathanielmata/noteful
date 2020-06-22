@@ -105,7 +105,6 @@ class App extends React.Component {
       getCurrentNoteData: this.getCurrentNoteData,
     }
 
-    console.log(this.state.notFound);
     return (
       <div className="App">
         <header>
