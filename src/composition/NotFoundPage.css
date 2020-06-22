@@ -1,3 +1,9 @@
 .notfound__container {
   width: 100%;
+  text-align: center;
+}
+
+.notfound__homelink {
+  text-decoration: underline;
+  font-weight: bold;
 }
