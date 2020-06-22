@@ -23,7 +23,14 @@ class AddNote extends React.Component {
 
   postNoteRequest(event, postNoteCb) {
     event.preventDefault();
-    const note = {...this.state}
+    const {name, content, folderId} = {...this.state};
+    const note = {
+      name: name.value,
+      content: content.value,
+      modified: new Date().toJSON(),
+      folderId
+    };
+
     fetch(config.API_URL + 'notes', {
       method: 'POST',
       body: JSON.stringify(note),
