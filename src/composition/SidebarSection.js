@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import './SidebarSection.css';
 
 function SidebarSection(props) {
@@ -51,6 +52,33 @@ function SidebarSection(props) {
     </>
   );
 }
+
+SidebarSection.propTypes = {
+  allFolders: PropTypes.arrayOf(PropTypes.object).isRequired,
+  getCurrentNoteData: (props, propName, componentName) => {
+    // first get the value of the prop
+    const prop = props[propName];
+
+    // is required check that it exists
+    if(!prop) {
+      return new Error(`${propName} is required in ${componentName}. Validation Failed`);
+    }
+
+    // check that the prop is a function
+    if (typeof prop != 'function') {
+      return new Error(`Invalid prop, ${propName} is expected to be a function in ${componentName}. ${typeof prop} found.`);
+    }
+
+    // check that the instantiated prop function returns an array
+    if(!Array.isArray(prop())) {
+      return new Error(`Invalid prop, ${propName} should return an array in ${componentName}. ${prop} found.`);
+    }
+  }
+};
+
+SidebarSection.defaultProps = {
+  allFolders: []
+};
 
 // wrap folders in an unordered list
 function listWrapper(folders, history ) {
