@@ -31,7 +31,7 @@ button {
   background-color: #FFFFFF;
 }
 
-button:hover {
+button:not([disabled]):hover {
   background-color: blue;
   border-color: blue;
   color: #FFFFFF;
