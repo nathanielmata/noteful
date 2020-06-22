@@ -1,16 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import NotefulContext from '../NotefulContext';
 import './SidebarSection.css';
 
 class SidebarSection extends React.Component {
-  static contextType = NotefulContext;
-  
   render() {
     const params = this.props.match.params;
     const data = params.noteId 
-      ? this.context.getCurrentNoteData(params.noteId) 
-      : this.context.store.folders;
+      ? this.props.getCurrentNoteData(params.noteId) 
+      : this.props.allFolders;
 
     // iterate over sidebar folder data
     const folders = data.map((folder, idx) => {
@@ -31,7 +28,7 @@ class SidebarSection extends React.Component {
                 );
               }
               
-              // if note page return back button and folder name
+              // if this is note page return back button and folder name
               return (
                 <>
                   <button className="sidebar__item" onClick={() => this.props.history.goBack()}>

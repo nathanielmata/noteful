@@ -89,7 +89,11 @@ class MainSection extends React.Component {
     return (
       <>
         <SidebarWrapper>  
-          <SidebarSection {...this.props} />
+          <SidebarSection 
+            {...this.props}
+            getCurrentNoteData={this.context.getCurrentNoteData}
+            allFolders={this.context.store.folders}
+          />
         </SidebarWrapper>
         <MainWrapper>
           {params.noteId ? notes[0] : listWrapper(notes)}
