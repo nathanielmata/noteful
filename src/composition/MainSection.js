@@ -34,6 +34,14 @@ class MainSection extends React.Component {
     .catch(err => console.log(err));
   }
 
+  localizeNoteDate(date) {
+    return new Date(date).toLocaleDateString('en-US', { 
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    })
+  }
+
   render() {
     const params = this.props.match.params;
     let data = params.noteId 
@@ -65,7 +73,7 @@ class MainSection extends React.Component {
               }
             </h1>
             <div>
-              <span>{note.modified}</span>
+              <span>Date modified: {this.localizeNoteDate(note.modified)}</span>
               <button onClick={() => {
                   this.deleteNoteRequest(note.id, this.context.deleteNote)
                 }}>Delete Note</button>
