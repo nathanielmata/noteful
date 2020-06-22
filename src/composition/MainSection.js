@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import MainWrapper from './MainWrapper';
 import SidebarWrapper from './SidebarWrapper';
 import SidebarSection from './SidebarSection';
+import MainError from './MainError';
 import NotefulContext from '../NotefulContext';
 import config from '../config';
 import './MainSection.css';
@@ -87,7 +88,7 @@ class MainSection extends React.Component {
     });
   
     return (
-      <>
+      <MainError>
         <SidebarWrapper>  
           <SidebarSection 
             {...this.props}
@@ -101,7 +102,7 @@ class MainSection extends React.Component {
             <button onClick={() => this.props.history.push('/note/new')}>Add note</button>
           }
         </MainWrapper>
-      </>
+      </MainError>
     );
   }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import MainWrapper from './MainWrapper';
 import ValidationError from './ValidationError';
+import AddNoteError from './AddNoteError';
 import NotefulContext from '../NotefulContext';
 import { validateName, validateContent } from '../validate';
 import config from '../config';
@@ -79,58 +80,60 @@ class AddNote extends React.Component {
     const nameError = validateName(this.state.name.value);
     const contentError = validateContent(this.state.content.value);
     return (
-      <MainWrapper>
-        <form
-          className="form__container"
-          onSubmit={(e) => this.postNoteRequest(e, this.context.addNote)}>
-          <h1>Add Note</h1>
-          <div className="form__group">
-            <label htmlFor="name">Note Name:</label>
-            <input 
-              name="name"
-              id="name"
-              value={this.state.name.value}
-              onChange={(e) => this.handleNameChange(e)} />
-            {this.state.name.touched && (
-              <ValidationError message={nameError}/>
-            )}
-          </div>
-          <div className="form__group">
-            <label htmlFor="name">Note Folder:</label>
-            <select 
-              name="folder"
-              id="folder"
-              value={this.state.folderId}
-              onChange={(e) => this.handleFolderChange(e)}>
-                {this.context.store.folders.map(folder => {
-                  return (
-                    <option key={folder.id} value={folder.id}>{folder.name}</option>
-                  );
-                })}
-            </select>
-          </div>
-          <div className="form__group">
-            <label htmlFor="content">Note Content:</label>
-            <textarea 
-              className="note__textarea"
-              name="content"
-              id="content"
-              rows={5}
-              columns={30}
-              maxLength={1000}
-              value={this.state.content.value}
-              onChange={(e) => this.handleContentChange(e)} />
-            {this.state.content.touched && (
-              <ValidationError message={contentError}/>
-            )}
-          </div>
-          <div className="form__group">
-            <button
-              type="submit"
-              disabled={nameError || contentError}>Add note</button>
-          </div>
-        </form>
-      </MainWrapper>
+      <AddNoteError>
+        <MainWrapper>
+          <form
+            className="form__container"
+            onSubmit={(e) => this.postNoteRequest(e, this.context.addNote)}>
+            <h1>Add Note</h1>
+            <div className="form__group">
+              <label htmlFor="name">Note Name:</label>
+              <input 
+                name="name"
+                id="name"
+                value={this.state.name.value}
+                onChange={(e) => this.handleNameChange(e)} />
+              {this.state.name.touched && (
+                <ValidationError message={nameError}/>
+              )}
+            </div>
+            <div className="form__group">
+              <label htmlFor="name">Note Folder:</label>
+              <select 
+                name="folder"
+                id="folder"
+                value={this.state.folderId}
+                onChange={(e) => this.handleFolderChange(e)}>
+                  {this.context.store.folders.map(folder => {
+                    return (
+                      <option key={folder.id} value={folder.id}>{folder.name}</option>
+                    );
+                  })}
+              </select>
+            </div>
+            <div className="form__group">
+              <label htmlFor="content">Note Content:</label>
+              <textarea 
+                className="note__textarea"
+                name="content"
+                id="content"
+                rows={5}
+                columns={30}
+                maxLength={1000}
+                value={this.state.content.value}
+                onChange={(e) => this.handleContentChange(e)} />
+              {this.state.content.touched && (
+                <ValidationError message={contentError}/>
+              )}
+            </div>
+            <div className="form__group">
+              <button
+                type="submit"
+                disabled={nameError || contentError}>Add note</button>
+            </div>
+          </form>
+        </MainWrapper>
+      </AddNoteError>
     );
   }
 }
