@@ -36,12 +36,14 @@ class App extends React.Component {
         }
         return response.json();
       })
-      .then(responseJson => {
-        // console.log({...this.state.store, [key]: responseJson});
+      .then(resJson => {
+        // console.log({...this.state.store, [key]: resJson});
+        const data = (key === "notes") ? resJson.map(note => ({...note, folderId: note.folder_id}) ) : resJson; 
+  
         this.setState({
           store: {
             ...this.state.store,
-            [key]: responseJson
+            [key]: data
           },
         });
       })
@@ -81,9 +83,10 @@ class App extends React.Component {
   }
 
   getCurrentNoteData = (id) => {
-    // add folderName to our note data obj and wrap in an array b/c our component expects an array 
-    const note = this.state.store.notes.find(note => note.id === id);
-    
+    // add folderName to our note data obj and wrap in an array b/c our component expects an array
+    // convert id string retrieved from url params to a number with the unary plus operator
+    const note = this.state.store.notes.find(note => note.id === +id);
+  
     // if folders and notes not available return empty array
     // necessary because getCurrentNoteData fires before componentDidMount fetches data
     // when using the back button in browser
@@ -97,6 +100,8 @@ class App extends React.Component {
   }
 
   render() {
+
+    console.log(this.getCurrentNoteData())
     const contextValue = {
       store: this.state.store,
       deleteNote: this.deleteNote,
