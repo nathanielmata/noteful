@@ -50,7 +50,8 @@ class MainSection extends React.Component {
       : this.context.store.notes;
 
     if (params.folderId) {
-      data = this.context.store.notes.filter(note => note.folderId === params.folderId);
+      // convert params.folderId string retrieved from url params to a number with the unary plus operator
+      data = this.context.store.notes.filter(note => note.folderId === +params.folderId);
     }
 
     // iterate over main note data
