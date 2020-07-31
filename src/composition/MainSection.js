@@ -24,7 +24,7 @@ class MainSection extends React.Component {
           throw error;
         })
       }
-      return response.json();
+      return response;
     })
     .then(responseJson => {
       deleteNoteCb(noteId)
