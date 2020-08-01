@@ -5,8 +5,8 @@ import './SidebarSection.css';
 
 function SidebarSection(props) {
   const params = props.match.params;
-  const data = params.noteId 
-    ? props.getCurrentNoteData(params.noteId) 
+  const data = params.note_id 
+    ? props.getCurrentNoteData(params.note_id) 
     : props.allFolders;
 
   // iterate over sidebar folder data
@@ -16,12 +16,12 @@ function SidebarSection(props) {
         {
           (() => {
             // if route is not note page return folder links
-            if (!params.noteId) {
+            if (!params.note_id) {
               return (
                 <li key={idx}>
                   <Link
                     to={`/folder/${folder.id}`}
-                    className={`sidebar__item${params.folderId === folder.id ? " sidebar__selected" : ""}`}>
+                    className={`sidebar__item${params.folder_id === folder.id ? " sidebar__selected" : ""}`}>
                     {folder.name}
                   </Link>
                 </li>
@@ -45,7 +45,7 @@ function SidebarSection(props) {
 
   return (
     <>
-      {(() => !params.noteId
+      {(() => !params.note_id
         ? listWrapper(folders, props.history)
         : folders   
       )()}
