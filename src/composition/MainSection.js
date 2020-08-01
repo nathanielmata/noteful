@@ -11,12 +11,13 @@ import './MainSection.css';
 class MainSection extends React.Component { 
   static contextType = NotefulContext;
 
-  deleteNoteRequest(noteId, deleteNoteCb) {
-    fetch(config.API_URL + `notes/${noteId}`, {
+  deleteNoteRequest(note_id, deleteNoteCb) {
+    fetch(config.API_URL + `notes/${note_id}`, {
       method: 'DELETE',
       headers: {
-        'content-type': 'application/json'
-      }
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${config.API_KEY}`
+      },
     })
     .then(response => {
       if (!response.ok) {
@@ -27,8 +28,8 @@ class MainSection extends React.Component {
       return response;
     })
     .then(responseJson => {
-      deleteNoteCb(noteId)
-      if (this.props.match.params.noteId) {
+      deleteNoteCb(note_id)
+      if (this.props.match.params.note_id) {
         this.props.history.push('/');
       }
     })
@@ -45,13 +46,13 @@ class MainSection extends React.Component {
 
   render() {
     const params = this.props.match.params;
-    let data = params.noteId 
-      ? this.context.getCurrentNoteData(params.noteId) 
+    let data = params.note_id 
+      ? this.context.getCurrentNoteData(params.note_id) 
       : this.context.store.notes;
 
-    if (params.folderId) {
-      // convert params.folderId string retrieved from url params to a number with the unary plus operator
-      data = this.context.store.notes.filter(note => note.folderId === +params.folderId);
+    if (params.folder_id) {
+      // convert params.folder_id string retrieved from url params to a number with the unary plus operator
+      data = this.context.store.notes.filter(note => note.folder_id === +params.folder_id);
     }
 
     // iterate over main note data
@@ -60,7 +61,7 @@ class MainSection extends React.Component {
         <>
           <div className="note__card">
             <h1>
-              {!params.noteId &&
+              {!params.note_id &&
                 <Link
                   to={`/note/${note.id}`}
                   className="note__card--name note__card--click">
@@ -68,7 +69,7 @@ class MainSection extends React.Component {
                 </Link>
               }
 
-              {params.noteId &&
+              {params.note_id &&
                 <span className="note__card--name">
                   {note.name}
                 </span>
@@ -81,7 +82,7 @@ class MainSection extends React.Component {
                 }}>Delete Note</button>
             </div>
           </div>
-          {params.noteId &&
+          {params.note_id &&
             <p>{note.content}</p>
           }
         </>
@@ -98,8 +99,8 @@ class MainSection extends React.Component {
           />
         </SidebarWrapper>
         <MainWrapper>
-          {params.noteId ? notes[0] : listWrapper(notes)}
-          {!params.noteId &&
+          {params.note_id ? notes[0] : listWrapper(notes)}
+          {!params.note_id &&
             <button onClick={() => this.props.history.push('/note/new')}>Add note</button>
           }
         </MainWrapper>

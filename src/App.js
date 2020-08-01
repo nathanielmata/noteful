@@ -25,7 +25,8 @@ class App extends React.Component {
       fetch(`${config.API_URL}${key}`, {
         method: 'GET',
         headers: {
-          'content-type': 'application/json'
+          'content-type': 'application/json',
+          'Authorization': `Bearer ${config.API_KEY}`
         },
       })
       .then(response => {
@@ -37,13 +38,10 @@ class App extends React.Component {
         return response.json();
       })
       .then(resJson => {
-        // console.log({...this.state.store, [key]: resJson});
-        const data = (key === "notes") ? resJson.map(note => ({...note, folderId: note.folder_id}) ) : resJson; 
-  
         this.setState({
           store: {
             ...this.state.store,
-            [key]: data
+            [key]: resJson
           },
         });
       })
@@ -54,8 +52,8 @@ class App extends React.Component {
   }
 
 
-  deleteNote = (noteId) => {
-    const notes = this.state.store.notes.filter(note => note.id !== noteId);
+  deleteNote = (note_id) => {
+    const notes = this.state.store.notes.filter(note => note.id !== note_id);
     this.setState({
       store: {
         ...this.state.store,
@@ -74,9 +72,6 @@ class App extends React.Component {
   }
 
   addNote = (noteObj) => {
-    // add folderId item to returned post request data to pass to the state
-    // should probably just go through client and change all refernces to folderId to folder_id to match db
-    noteObj = {...noteObj, folderId: noteObj.folder_id}
     this.setState({
       store: {
         ...this.state.store,
@@ -95,7 +90,7 @@ class App extends React.Component {
     // when using the back button in browser
     if (this.state.store.folders.length && note) {      
       // we need the current note folder name to display in the sidebar so add it to the note we just retrieved
-      note["folderName"] = this.state.store.folders.find(folder => folder.id === note.folderId).name;
+      note["folderName"] = this.state.store.folders.find(folder => folder.id === note.folder_id).name;
       return [note];
     }
 
@@ -125,9 +120,9 @@ class App extends React.Component {
             <Switch>
                 <Route exact path="/" component={MainSection}/>
                 <Route exact path="/folder/new" component={AddFolder} />
-                <Route path="/folder/:folderId" component={MainSection}/>
+                <Route path="/folder/:folder_id" component={MainSection}/>
                 <Route exact path="/note/new" component={AddNote} />
-                <Route path="/note/:noteId" component={MainSection}/>
+                <Route path="/note/:note_id" component={MainSection}/>
                 <Route component={NotFoundPage} />
             </Switch>
             

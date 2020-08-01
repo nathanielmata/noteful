@@ -17,27 +17,28 @@ class AddNote extends React.Component {
       value: '',
       touched: false
     },
-    folderId: '',
+    folder_id: '',
   }
 
   static contextType = NotefulContext;
 
   postNoteRequest(event, postNoteCb) {
     event.preventDefault();
-    const {name, content, folderId} = {...this.state};
+    const {name, content, folder_id} = {...this.state};
     const note = {
       name: name.value,
       content: content.value,
       modified: new Date().toJSON(),
-      folderId
+      folder_id: +folder_id
     };
 
     fetch(config.API_URL + 'notes', {
       method: 'POST',
       body: JSON.stringify(note),
       headers: {
-        'content-type': 'application/json'
-      }
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${config.API_KEY}`
+      },
     })
     .then(response => {
       if (!response.ok) {
@@ -49,6 +50,7 @@ class AddNote extends React.Component {
     })
     .then(responseJson => {
       postNoteCb(responseJson);
+      console.log(responseJson);
       this.props.history.push('/');
     })
     .catch(err => console.log(err))
@@ -72,7 +74,7 @@ class AddNote extends React.Component {
   }
   handleFolderChange(event) {
     this.setState({
-      folderId: event.target.value
+      folder_id: event.target.value
     })
   }
 
@@ -102,7 +104,7 @@ class AddNote extends React.Component {
               <select 
                 name="folder"
                 id="folder"
-                value={this.state.folderId}
+                value={this.state.folder_id}
                 onChange={(e) => this.handleFolderChange(e)}>
                   {this.context.store.folders.map(folder => {
                     return (
