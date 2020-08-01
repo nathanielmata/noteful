@@ -1,5 +1,5 @@
 import React from 'react';
-import {  Link, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Switch, Link, Route } from 'react-router-dom';
 import MainSection from './composition/MainSection';
 import AddFolder from './composition/AddFolder';
 import AddNote from './composition/AddNote';
@@ -74,6 +74,9 @@ class App extends React.Component {
   }
 
   addNote = (noteObj) => {
+    // add folderId item to returned post request data to pass to the state
+    // should probably just go through client and change all refernces to folderId to folder_id to match db
+    noteObj = {...noteObj, folderId: noteObj.folder_id}
     this.setState({
       store: {
         ...this.state.store,
@@ -100,8 +103,6 @@ class App extends React.Component {
   }
 
   render() {
-
-    console.log(this.getCurrentNoteData())
     const contextValue = {
       store: this.state.store,
       deleteNote: this.deleteNote,
@@ -112,6 +113,7 @@ class App extends React.Component {
 
     return (
       <div className="App">
+        <BrowserRouter>
         <header>
           <Link to="/">
             <h1>Noteful</h1>
@@ -119,16 +121,19 @@ class App extends React.Component {
         </header>
         <NotefulContext.Provider value={contextValue}>
           <>
+          
             <Switch>
-              <Route exact path="/" component={MainSection}/>
-              <Route exact path="/folder/new" component={AddFolder} />
-              <Route path="/folder/:folderId" component={MainSection}/>
-              <Route exact path="/note/new" component={AddNote} />
-              <Route path="/note/:noteId" component={MainSection}/>
-              <Route component={NotFoundPage} />
+                <Route exact path="/" component={MainSection}/>
+                <Route exact path="/folder/new" component={AddFolder} />
+                <Route path="/folder/:folderId" component={MainSection}/>
+                <Route exact path="/note/new" component={AddNote} />
+                <Route path="/note/:noteId" component={MainSection}/>
+                <Route component={NotFoundPage} />
             </Switch>
+            
           </>
         </NotefulContext.Provider>
+        </BrowserRouter>
       </div>
     );
   }
