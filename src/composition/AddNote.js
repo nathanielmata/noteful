@@ -8,6 +8,8 @@ import config from '../config';
 import './AddNote.css';
 
 class AddNote extends React.Component {
+  static contextType = NotefulContext;
+
   state = {
     name: {
       value: '',
@@ -17,10 +19,8 @@ class AddNote extends React.Component {
       value: '',
       touched: false
     },
-    folder_id: '',
+    folder_id: this.context.store.folders[0].id,
   }
-
-  static contextType = NotefulContext;
 
   postNoteRequest(event, postNoteCb) {
     event.preventDefault();
