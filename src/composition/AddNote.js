@@ -50,7 +50,6 @@ class AddNote extends React.Component {
     })
     .then(responseJson => {
       postNoteCb(responseJson);
-      console.log(responseJson);
       this.props.history.push('/');
     })
     .catch(err => console.log(err))
