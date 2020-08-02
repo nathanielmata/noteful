@@ -36,8 +36,7 @@ class AddNote extends React.Component {
       method: 'POST',
       body: JSON.stringify(note),
       headers: {
-        'content-type': 'application/json',
-        'Authorization': `Bearer ${config.API_KEY}`
+        'content-type': 'application/json'
       },
     })
     .then(response => {

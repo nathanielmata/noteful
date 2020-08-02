@@ -25,8 +25,7 @@ class App extends React.Component {
       fetch(`${config.API_URL}${key}`, {
         method: 'GET',
         headers: {
-          'content-type': 'application/json',
-          'Authorization': `Bearer ${config.API_KEY}`
+          'content-type': 'application/json'
         },
       })
       .then(response => {

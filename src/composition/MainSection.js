@@ -15,8 +15,7 @@ class MainSection extends React.Component {
     fetch(config.API_URL + `notes/${note_id}`, {
       method: 'DELETE',
       headers: {
-        'content-type': 'application/json',
-        'Authorization': `Bearer ${config.API_KEY}`
+        'content-type': 'application/json'
       },
     })
     .then(response => {
