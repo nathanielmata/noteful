@@ -122,7 +122,7 @@ class App extends React.Component {
                   <Route path="/folder/:folder_id" component={MainSection}/>
                   <Route exact path="/note/new" component={AddNote} />
                   <Route path="/note/:note_id" component={MainSection}/>
-                  <Route component={NotFoundPage} />
+                  {/* <Route component={NotFoundPage} /> */}
               </Switch>
               
             </>
