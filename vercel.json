@@ -2,11 +2,14 @@
   "version": 2,
   "routes": [
     {
+      "handle": "filesystem"
+    },
+    {
       "src": "^/static/(.*)",
       "dest": "/static/$1"
     },
     {
-      "src": ".*",
+      "src": "/.*",
       "dest": "/index.html"
     }
   ]

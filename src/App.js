@@ -108,25 +108,25 @@ class App extends React.Component {
     return (
       <div className="App">
         <BrowserRouter>
-        <header>
-          <Link to="/">
-            <h1>Noteful</h1>
-          </Link>
-        </header>
-        <NotefulContext.Provider value={contextValue}>
-          <>
-          
-            <Switch>
-                <Route exact path="/" component={MainSection}/>
-                <Route exact path="/folder/new" component={AddFolder} />
-                <Route path="/folder/:folder_id" component={MainSection}/>
-                <Route exact path="/note/new" component={AddNote} />
-                <Route path="/note/:note_id" component={MainSection}/>
-                <Route component={NotFoundPage} />
-            </Switch>
+          <header>
+            <Link to="/">
+              <h1>Noteful</h1>
+            </Link>
+          </header>
+          <NotefulContext.Provider value={contextValue}>
+            <>
             
-          </>
-        </NotefulContext.Provider>
+              <Switch>
+                  <Route exact path="/" component={MainSection}/>
+                  <Route exact path="/folder/new" component={AddFolder} />
+                  <Route path="/folder/:folder_id" component={MainSection}/>
+                  <Route exact path="/note/new" component={AddNote} />
+                  <Route path="/note/:note_id" component={MainSection}/>
+                  <Route component={NotFoundPage} />
+              </Switch>
+              
+            </>
+          </NotefulContext.Provider>
         </BrowserRouter>
       </div>
     );
